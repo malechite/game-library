@@ -1,0 +1,35 @@
+info:
+  name: Patch User
+  type: http
+  seq: 4
+
+http:
+  method: PATCH
+  url: "{{baseUrl}}/users/{{userId}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Alice (Updated)"
+      }
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("returns updated user", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().name).to.equal("Alice (Updated)");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

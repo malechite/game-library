@@ -1,0 +1,33 @@
+info:
+  name: List Audit Logs
+  type: http
+  seq: 1
+
+# Super-admin only: the seeded admin has the flag, so login-as-admin first.
+http:
+  method: GET
+  url: "{{baseUrl}}/audit?$sort[createdAt]=-1&$limit=10"
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.getBody() && res.getBody().data && res.getBody().data.length > 0) {
+          bru.setEnvVar("auditId", res.getBody().data[0].id);
+        }
+    - type: tests
+      code: |-
+        test("returns paginated audit entries", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().data).to.be.an("array");
+          expect(res.getBody().total).to.be.a("number");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

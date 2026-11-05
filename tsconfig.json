@@ -1,0 +1,8 @@
+{
+  "extends": "./tooling/typescript-config/base.json",
+  "include": ["packages/**/src/**/*", "ui/**/src/**/*", "tooling/**/src/**/*", "apps/**/src/**/*"],
+  "exclude": ["**/*.stories.tsx", "**/*.stories.ts"],
+  "compilerOptions": {
+    "jsx": "react-jsx"
+  }
+}

@@ -1,0 +1,33 @@
+info:
+  name: List Ownerships
+  type: http
+  seq: 1
+
+# Captures the first row as `ownershipId` so other requests (games, collection items) can reference real data.
+http:
+  method: GET
+  url: "{{baseUrl}}/ownerships?$sort[name]=1"
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.getBody() && res.getBody().data && res.getBody().data.length > 0) {
+          bru.setEnvVar("ownershipId", res.getBody().data[0].id);
+        }
+    - type: tests
+      code: |-
+        test("returns paginated ownerships", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().data).to.be.an("array");
+          expect(res.getBody().total).to.be.a("number");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "base-mira",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "",
+    "baseColor": "neutral",
+    "cssVariables": true
+  },
+  "iconLibrary": "phosphor",
+  "aliases": {
+    "components": "@game-library/cinder/components/base",
+    "utils": "@game-library/cinder/lib/utils",
+    "hooks": "@game-library/cinder/hooks",
+    "lib": "@game-library/cinder/lib",
+    "ui": "@game-library/cinder/components/base"
+  },
+  "rtl": false,
+  "menuColor": "default",
+  "menuAccent": "subtle"
+}

@@ -1,0 +1,50 @@
+info:
+  name: Upload Asset (base64)
+  type: http
+  seq: 1
+
+# Custom service method exposed as a Koa route (Feathers REST doesn't expose
+# custom methods over HTTP). Maps to AssetService.upload — see apps/api/src/app.ts.
+# Body is { filename, contentType, fileData (base64), metadata? }; the service
+# stores the object in MinIO/S3 and persists the Asset row it returns.
+http:
+  method: POST
+  url: "{{baseUrl}}/assets/upload"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "filename": "pixel.png",
+        "contentType": "image/png",
+        "fileData": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "metadata": { "purpose": "cover-art" }
+      }
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.getBody() && res.getBody().id) {
+          bru.setEnvVar("assetId", res.getBody().id);
+          bru.setEnvVar("assetUrl", res.getBody().url);
+        }
+    - type: tests
+      code: |-
+        test("returns the stored asset", function () {
+          expect(res.getStatus()).to.equal(201);
+          expect(res.getBody().id).to.be.a("string");
+          expect(res.getBody().url).to.be.a("string");
+          expect(res.getBody().ownerId).to.equal(bru.getEnvVar("currentUserId"));
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

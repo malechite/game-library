@@ -1,0 +1,32 @@
+{
+  "name": "@game-library/tokens",
+  "version": "0.1.1",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@game-library/types": "workspace:*"
+  },
+  "devDependencies": {
+    "@game-library/typescript-config": "workspace:*",
+    "tsup": "^8.5.1"
+  }
+}

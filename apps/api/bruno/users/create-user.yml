@@ -1,0 +1,48 @@
+info:
+  name: Create User
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/users"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "email": "alice@game-library.dev",
+        "password": "secret123",
+        "name": "Alice"
+      }
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        const suffix = Date.now();
+        req.setBody({
+          email: `alice+${suffix}@game-library.dev`,
+          password: "secret123",
+          name: "Alice"
+        });
+    - type: after-response
+      code: |-
+        if (res.getBody() && res.getBody().id) {
+          bru.setEnvVar("userId", res.getBody().id);
+        }
+    - type: tests
+      code: |-
+        test("returns created user without password", function () {
+          expect(res.getStatus()).to.equal(201);
+          expect(res.getBody().id).to.be.a("string");
+          expect(res.getBody().password).to.equal(undefined);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,30 @@
+info:
+  name: List Collection Items
+  type: http
+  seq: 2
+
+# The raw copies (ids only). For the joined, filterable view the UI uses, see library/list-library.
+http:
+  method: GET
+  url: "{{baseUrl}}/collection-items?$sort[createdAt]=-1&$limit=10"
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("returns only the caller's items", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().data).to.be.an("array");
+          res.getBody().data.forEach(function (item) {
+            expect(item.ownerId).to.equal(bru.getEnvVar("currentUserId"));
+          });
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

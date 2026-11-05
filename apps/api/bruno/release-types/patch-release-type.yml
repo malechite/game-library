@@ -1,0 +1,39 @@
+info:
+  name: Patch Release Type
+  type: http
+  seq: 4
+
+# Super admin only — reference data is shared by every user.
+http:
+  method: PATCH
+  url: "{{baseUrl}}/release-types/{{newReleaseTypeId}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Bruno Release Type (Renamed)"
+      }
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        req.setBody({ name: `Bruno Release Type (Renamed) ${Date.now()}` });
+    - type: tests
+      code: |-
+        test("returns the renamed release type", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().name).to.contain("(Renamed)");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

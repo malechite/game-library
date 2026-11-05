@@ -1,0 +1,27 @@
+info:
+  name: Remove Collection Item
+  type: http
+  seq: 5
+
+# Removes the copy only; the catalog game stays.
+http:
+  method: DELETE
+  url: "{{baseUrl}}/collection-items/{{collectionItemId}}"
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("returns the removed item", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().id).to.equal(bru.getEnvVar("collectionItemId"));
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

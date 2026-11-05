@@ -1,0 +1,36 @@
+info:
+  name: List Library
+  type: http
+  seq: 1
+
+# The signed-in user's collection with game and lookup names joined in — what the UI renders.
+# Filters: platformId, genreId, ownershipId, status, isFavorite=true, title[$ilike]=%25zelda%25.
+# Pages hold 100 items by default ($limit up to 100).
+# Sort: title, value, acquiredAt, platformName, metacritic (nulls always last).
+http:
+  method: GET
+  url: "{{baseUrl}}/library?$sort[value]=-1&$limit=100"
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.getBody() && res.getBody().data && res.getBody().data.length > 0) {
+          bru.setEnvVar("libraryItemId", res.getBody().data[0].id);
+        }
+    - type: tests
+      code: |-
+        test("returns a page of joined library items", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().data).to.be.an("array");
+          expect(res.getBody().total).to.be.a("number");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

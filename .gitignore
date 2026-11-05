@@ -1,0 +1,29 @@
+.DS_Store
+node_modules
+npm-debug.log
+storybook.log
+build/**
+**/dist/
+apps/api/lib/
+storybook-static
+.turbo
+coverage
+
+# pnpm store
+.pnpm-store
+
+# Vim session files
+Session.vim
+
+# Local data (CSV exports, scratch)
+apps/*/.data/
+
+# Environment + secrets
+.env
+*.pem
+*.key
+id_rsa
+id_ed25519
+
+# TypeScript build artifacts
+*.tsbuildinfo

@@ -1,0 +1,31 @@
+info:
+  name: Library Summary
+  type: http
+  seq: 3
+
+# Custom route: totals for the caller's library. Accepts the same filters as list-library
+# (paging and sort are ignored). Maps to LibraryService.summary — see apps/api/src/routes.ts.
+http:
+  method: GET
+  url: "{{baseUrl}}/library/summary"
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("returns totals and cover-sync progress", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().count).to.be.a("number");
+          expect(res.getBody().totalValue).to.be.a("number");
+          expect(res.getBody().missingCovers).to.be.a("number");
+          expect(res.getBody().coverSyncActive).to.be.a("boolean");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

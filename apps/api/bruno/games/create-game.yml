@@ -1,0 +1,53 @@
+info:
+  name: Create Game
+  type: http
+  seq: 1
+
+# Adds a game to the shared catalog. `categoryId` is optional (defaults to the "Games" category).
+# Run platforms/list-platforms, categories/list-categories
+# and genres/list-genres first so `platformId`, `categoryId` and `genreId` are set.
+http:
+  method: POST
+  url: "{{baseUrl}}/games"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Bruno Quest",
+        "platformId": "{{platformId}}",
+        "categoryId": "{{categoryId}}",
+        "genreIds": ["{{genreId}}"],
+        "metacritic": 88
+      }
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        const body = req.getBody();
+        body.title = `Bruno Quest ${Date.now()}`;
+        req.setBody(body);
+    - type: after-response
+      code: |-
+        if (res.getBody() && res.getBody().id) {
+          bru.setEnvVar("gameId", res.getBody().id);
+        }
+    - type: tests
+      code: |-
+        test("returns the created game with its genres", function () {
+          expect(res.getStatus()).to.equal(201);
+          expect(res.getBody().id).to.be.a("string");
+          expect(res.getBody().genreIds).to.have.lengthOf(1);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

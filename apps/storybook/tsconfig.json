@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@game-library/armature": ["../../ui/armature/src/index.ts"],
+      "@game-library/armature/*": ["../../ui/armature/src/*"],
+      "@game-library/cinder/*": ["../../ui/cinder/src/*"],
+      "@game-library/icon": ["../../ui/icon/src/index.ts"],
+      "@game-library/icon/all": ["../../ui/icon/src/all.ts"],
+      "@game-library/lattice": ["../../ui/lattice/src/index.ts"],
+      "@game-library/tokens": ["../../ui/tokens/src/index.ts"],
+      "@game-library/types": ["../../packages/types/src/index.ts"],
+      "@game-library/types/*": ["../../packages/types/src/*"],
+      "@game-library/util": ["../../packages/util/src/index.ts"],
+      "@game-library/util/*": ["../../packages/util/src/*"]
+    },
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src", ".storybook"],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}

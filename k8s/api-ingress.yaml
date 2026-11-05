@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: game-library
+  namespace: everhart
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    traefik.ingress.kubernetes.io/router.middlewares: everhart-redirect-https@kubernetescrd
+spec:
+  tls:
+    - hosts:
+        - game-library.everhart.io
+      secretName: game-library-everhart-io-tls
+  rules:
+    - host: game-library.everhart.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: game-library
+                port:
+                  number: 80

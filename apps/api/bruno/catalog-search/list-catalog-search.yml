@@ -1,0 +1,30 @@
+info:
+  name: Search Catalog
+  type: http
+  seq: 1
+
+# Powers the "Add game" search. `local` are matches in our catalog; `external` are matches from
+# IGDB when IGDB_CLIENT_ID / IGDB_CLIENT_SECRET are configured (`provider` is null otherwise).
+# Optional: &platformId={{platformId}}
+http:
+  method: GET
+  url: "{{baseUrl}}/catalog-search?q=mario"
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("returns local and external matches", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().local).to.be.an("array");
+          expect(res.getBody().external).to.be.an("array");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

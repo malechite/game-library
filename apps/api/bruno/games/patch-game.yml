@@ -1,0 +1,39 @@
+info:
+  name: Patch Game
+  type: http
+  seq: 4
+
+# The catalog is shared: any signed-in user may correct a game; every change is audit-logged.
+# `genreIds` replaces the game's genre links.
+http:
+  method: PATCH
+  url: "{{baseUrl}}/games/{{gameId}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "metacritic": 91,
+        "genreIds": []
+      }
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("returns the updated game", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().metacritic).to.equal(91);
+          expect(res.getBody().genreIds).to.have.lengthOf(0);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

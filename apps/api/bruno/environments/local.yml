@@ -1,0 +1,54 @@
+name: local
+variables:
+  - name: baseUrl
+    value: http://localhost:3030
+  - name: adminEmail
+    value: admin@game-library.dev
+  - name: adminPassword
+    value: development
+  - name: accessToken
+    value: ""
+  - name: currentUserId
+    value: ""
+  - name: userId
+    value: ""
+  - name: assetId
+    value: ""
+  - name: assetUrl
+    value: ""
+  - name: auditId
+    value: ""
+  - name: platformId
+    value: ""
+  - name: newPlatformId
+    value: ""
+  - name: categoryId
+    value: ""
+  - name: newCategoryId
+    value: ""
+  - name: countryId
+    value: ""
+  - name: newCountryId
+    value: ""
+  - name: releaseTypeId
+    value: ""
+  - name: newReleaseTypeId
+    value: ""
+  - name: ownershipId
+    value: ""
+  - name: newOwnershipId
+    value: ""
+  - name: genreId
+    value: ""
+  - name: newGenreId
+    value: ""
+  - name: companyId
+    value: ""
+  - name: newCompanyId
+    value: ""
+  - name: gameId
+    value: ""
+  - name: collectionItemId
+    value: ""
+  - name: libraryItemId
+    value: ""

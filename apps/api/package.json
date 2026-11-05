@@ -1,0 +1,81 @@
+{
+  "name": "@game-library/api",
+  "description": "Game Library API — Feathers (Koa + Knex + Postgres) serving the built web SPA",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=24"
+  },
+  "feathers": {
+    "language": "ts",
+    "packager": "pnpm",
+    "database": "postgresql",
+    "framework": "koa",
+    "transports": [
+      "rest",
+      "websockets"
+    ],
+    "schema": "typebox"
+  },
+  "directories": {
+    "lib": "src"
+  },
+  "main": "lib/index",
+  "scripts": {
+    "dev": "nodemon -x tsx src/index.ts",
+    "prebuild": "rm -rf lib",
+    "build": "tsc",
+    "start": "node lib",
+    "db:setup": "pnpm migrate && pnpm seed",
+    "seed": "node lib/db/seed.js",
+    "seed:dev": "tsx ./src/db/seed.ts",
+    "migrate": "knex migrate:latest",
+    "migrate:make": "knex migrate:make",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\"",
+    "test": "cross-env NODE_ENV=test pnpm migrate && cross-env NODE_ENV=test vitest run",
+    "test:watch": "cross-env NODE_ENV=test vitest",
+    "bruno:check": "node scripts/bruno-coverage.mjs",
+    "import:collection": "tsx ./scripts/import-collection.ts",
+    "covers:sync": "tsx ./scripts/sync-covers.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.700.0",
+    "@feathersjs/adapter-commons": "^5.0.31",
+    "@feathersjs/authentication": "^5.0.31",
+    "@feathersjs/authentication-local": "^5.0.31",
+    "@feathersjs/configuration": "^5.0.31",
+    "@feathersjs/errors": "^5.0.31",
+    "@feathersjs/feathers": "^5.0.31",
+    "@feathersjs/knex": "^5.0.31",
+    "@feathersjs/koa": "^5.0.31",
+    "@feathersjs/schema": "^5.0.31",
+    "@feathersjs/socketio": "^5.0.31",
+    "@feathersjs/transport-commons": "^5.0.31",
+    "@feathersjs/typebox": "^5.0.31",
+    "@game-library/types": "workspace:*",
+    "ajv": "^8.17.1",
+    "config": "^3.3.12",
+    "csv-parse": "^6.1.0",
+    "dotenv": "^17.2.3",
+    "knex": "^3.1.0",
+    "pg": "^8.13.1",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@game-library/eslint-config": "workspace:*",
+    "@game-library/typescript-config": "workspace:*",
+    "@game-library/web": "workspace:*",
+    "@types/config": "^3.3.5",
+    "@types/node": "^25.5.2",
+    "@types/pg": "^8.11.10",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.57.1",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.2"
+  }
+}

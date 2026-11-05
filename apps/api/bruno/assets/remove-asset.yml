@@ -1,0 +1,27 @@
+info:
+  name: Remove Asset
+  type: http
+  seq: 5
+
+# Also deletes the underlying object from MinIO/S3 (see the deleteFromStorage hook).
+http:
+  method: DELETE
+  url: "{{baseUrl}}/assets/{{assetId}}"
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("returns removed asset", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().id).to.equal(bru.getEnvVar("assetId"));
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

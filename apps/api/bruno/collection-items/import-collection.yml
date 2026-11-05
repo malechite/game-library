@@ -1,0 +1,43 @@
+info:
+  name: Import Collection (CSV)
+  type: http
+  seq: 6
+
+# Custom route: import a GAMEYE CSV export into the signed-in user's collection.
+# Maps to CollectionItemService.import — see apps/api/src/routes.ts.
+# Only rows in the "Games" category are imported; hardware rows are returned in `skipped`.
+# `replace` defaults to true (the existing collection is replaced). It is false here so running
+# this request never wipes a real library.
+http:
+  method: POST
+  url: "{{baseUrl}}/collection-items/import"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "replace": false,
+        "csv": "Platform,Category,UserRecordType,Title,Country,ReleaseType,Publisher,Developer,Genre,CreatedAt,Ownership,PriceLoose,PriceCIB,PriceNew,YourPrice,PricePaid,PriceSold,ItemCondition,BoxCondition,ManualCondition,OtherCondition,Notes,Tags,metacritic\n\"Bruno Console\",\"Games\",\"Owned\",\"Bruno Imported Game\",\"United States of America\",\"Official\",\"Bruno Publishing, Inc.\",\"Bruno Studio\",\"Action, Puzzle\",\"Aug 6, 2022\",\"Loose\",\"5.00\",\"20.00\",\"80.00\",\"5.00\",\"0.0\",\"0.0\",\"?\",\"?\",\"?\",\"?\",\"\",\"\",\"0\"\n"
+      }
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("imports the row", function () {
+          expect(res.getStatus()).to.equal(201);
+          expect(res.getBody().rows).to.equal(1);
+          expect(res.getBody().items).to.equal(1);
+          expect(res.getBody().skipped).to.have.lengthOf(0);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

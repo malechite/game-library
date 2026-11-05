@@ -1,0 +1,21 @@
+{
+  "name": "@game-library/typescript-config",
+  "version": "0.2.3",
+  "type": "module",
+  "license": "MIT",
+  "private": true,
+  "files": [
+    "base.json",
+    "react-library.json",
+    "tsup.base.ts"
+  ],
+  "exports": {
+    "./base.json": "./base.json",
+    "./react-library.json": "./react-library.json",
+    "./tsup.base": "./tsup.base.ts"
+  },
+  "devDependencies": {
+    "@vanilla-extract/esbuild-plugin": "^2.3.22",
+    "tsup": "^8.5.1"
+  }
+}

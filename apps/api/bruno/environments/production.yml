@@ -1,0 +1,56 @@
+name: production
+variables:
+  - name: baseUrl
+    value: https://game-library.everhart.io
+  - name: adminEmail
+    value: ""
+  - secret: true
+    name: adminPassword
+    type: string
+  - secret: true
+    name: accessToken
+    type: string
+  - name: currentUserId
+    value: ""
+  - name: userId
+    value: ""
+  - name: assetId
+    value: ""
+  - name: assetUrl
+    value: ""
+  - name: auditId
+    value: ""
+  - name: platformId
+    value: ""
+  - name: newPlatformId
+    value: ""
+  - name: categoryId
+    value: ""
+  - name: newCategoryId
+    value: ""
+  - name: countryId
+    value: ""
+  - name: newCountryId
+    value: ""
+  - name: releaseTypeId
+    value: ""
+  - name: newReleaseTypeId
+    value: ""
+  - name: ownershipId
+    value: ""
+  - name: newOwnershipId
+    value: ""
+  - name: genreId
+    value: ""
+  - name: newGenreId
+    value: ""
+  - name: companyId
+    value: ""
+  - name: newCompanyId
+    value: ""
+  - name: gameId
+    value: ""
+  - name: collectionItemId
+    value: ""
+  - name: libraryItemId
+    value: ""

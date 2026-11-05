@@ -1,0 +1,33 @@
+info:
+  name: Reauthenticate (JWT)
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/authentication"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "strategy": "jwt",
+        "accessToken": "{{accessToken}}"
+      }
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("returns access token", function () {
+          expect(res.getStatus()).to.equal(201);
+          expect(res.getBody().accessToken).to.be.a("string");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,41 @@
+info:
+  name: Login as Admin
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/authentication"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "strategy": "local",
+        "email": "{{adminEmail}}",
+        "password": "{{adminPassword}}"
+      }
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.getBody() && res.getBody().accessToken) {
+          bru.setEnvVar("accessToken", res.getBody().accessToken);
+          bru.setEnvVar("currentUserId", res.getBody().user.id);
+        }
+    - type: tests
+      code: |-
+        test("returns access token and user", function () {
+          expect(res.getStatus()).to.equal(201);
+          expect(res.getBody().accessToken).to.be.a("string");
+          expect(res.getBody().user.email).to.equal(bru.getEnvVar("adminEmail"));
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

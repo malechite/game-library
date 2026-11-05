@@ -1,0 +1,28 @@
+info:
+  name: List Games
+  type: http
+  seq: 2
+
+# `title[$ilike]` is a case-insensitive search (URL-encode the % wildcards).
+http:
+  method: GET
+  url: "{{baseUrl}}/games?title[$ilike]=%25bruno%25&$sort[title]=1&$limit=10"
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("returns paginated games", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().data).to.be.an("array");
+          expect(res.getBody().total).to.be.a("number");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,9 @@
+{
+  "extends": "@game-library/typescript-config/base.json",
+  "compilerOptions": {
+    "paths": {
+      "@game-library/types": ["../../packages/types/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*"]
+}

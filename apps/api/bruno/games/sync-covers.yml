@@ -1,0 +1,28 @@
+info:
+  name: Sync Covers
+  type: http
+  seq: 6
+
+# Custom route (super admin): queue cover-art resolution for every game that has none.
+# Maps to GameService.syncCovers — see apps/api/src/routes.ts. Returns immediately; covers arrive in the background.
+http:
+  method: POST
+  url: "{{baseUrl}}/games/covers/sync"
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("accepts the sync and reports how many games were queued", function () {
+          expect(res.getStatus()).to.equal(202);
+          expect(res.getBody().queued).to.be.a("number");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

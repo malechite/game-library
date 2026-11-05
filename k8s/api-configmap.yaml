@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: game-library-config
+  namespace: everhart
+data:
+  NODE_ENV: "production"
+  HOSTNAME: "0.0.0.0"
+  PORT: "3030"
+  # CORS allow-list (JSON array). The SPA is served by this same deployment, so
+  # only its own origin is listed. Parsed via node-config's __format:"json"
+  # mapping (config/custom-environment-variables.json).
+  ORIGINS: '["https://game-library.everhart.io"]'
+  # Internal endpoint the API uses to talk to MinIO (cluster DNS).
+  S3_ENDPOINT: "http://storage-everhart-hl:9000"
+  # Public, browser-reachable base URL for stored objects (used to build the URLs
+  # returned to clients). Must be HTTPS to avoid mixed-content in the SPA.
+  S3_PUBLIC_ENDPOINT: "https://storage.everhart.io"
+  S3_REGION: "us-nexus-1"
+  S3_BUCKET: "game-library"

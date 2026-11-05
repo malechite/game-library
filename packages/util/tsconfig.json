@@ -1,0 +1,7 @@
+{
+  "extends": "@game-library/typescript-config/base.json",
+  "compilerOptions": {
+    "typeRoots": ["../../node_modules/@types"]
+  },
+  "include": ["src"]
+}

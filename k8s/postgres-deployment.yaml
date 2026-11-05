@@ -1,0 +1,48 @@
+---
+# Game Library Postgres Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: game-library-db
+  namespace: everhart
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: game-library-db
+  template:
+    metadata:
+      labels:
+        app: game-library-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: "game_library_db"
+            - name: POSTGRES_USER
+              value: "game_library"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: game-library-db-secret
+                  key: POSTGRES_PASSWORD
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: db-storage
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: db-storage
+          persistentVolumeClaim:
+            claimName: game-library-db-pvc

@@ -1,0 +1,10 @@
+:root {
+  --font-sans: "Figtree", system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}

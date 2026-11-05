@@ -1,0 +1,46 @@
+info:
+  name: Create Platform
+  type: http
+  seq: 3
+
+# Create is find-or-create: posting an existing name returns that row.
+# A unique name is generated so the collection never touches real data; its id is kept as `newPlatformId`.
+http:
+  method: POST
+  url: "{{baseUrl}}/platforms"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Bruno Platform"
+      }
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        req.setBody({ name: `Bruno Platform ${Date.now()}` });
+    - type: after-response
+      code: |-
+        if (res.getBody() && res.getBody().id) {
+          bru.setEnvVar("newPlatformId", res.getBody().id);
+        }
+    - type: tests
+      code: |-
+        test("returns the created platform", function () {
+          expect(res.getStatus()).to.equal(201);
+          expect(res.getBody().id).to.be.a("string");
+          expect(res.getBody().name).to.contain("Bruno Platform");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

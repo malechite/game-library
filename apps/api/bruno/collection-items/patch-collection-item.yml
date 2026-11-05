@@ -1,0 +1,41 @@
+info:
+  name: Patch Collection Item
+  type: http
+  seq: 4
+
+# Only the copy's own details are patchable; `ownerId` and `gameId` are rejected.
+http:
+  method: PATCH
+  url: "{{baseUrl}}/collection-items/{{collectionItemId}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "value": 55,
+        "status": "wishlist",
+        "isFavorite": true,
+        "notes": "Re-priced"
+      }
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("returns the updated item", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().value).to.equal(55);
+          expect(res.getBody().status).to.equal("wishlist");
+          expect(res.getBody().isFavorite).to.equal(true);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

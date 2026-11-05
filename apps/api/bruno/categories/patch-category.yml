@@ -1,0 +1,39 @@
+info:
+  name: Patch Category
+  type: http
+  seq: 4
+
+# Super admin only — reference data is shared by every user.
+http:
+  method: PATCH
+  url: "{{baseUrl}}/categories/{{newCategoryId}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Bruno Category (Renamed)"
+      }
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        req.setBody({ name: `Bruno Category (Renamed) ${Date.now()}` });
+    - type: tests
+      code: |-
+        test("returns the renamed category", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().name).to.contain("(Renamed)");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

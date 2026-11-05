@@ -1,0 +1,46 @@
+info:
+  name: Create Ownership
+  type: http
+  seq: 3
+
+# Create is find-or-create: posting an existing name returns that row.
+# A unique name is generated so the collection never touches real data; its id is kept as `newOwnershipId`.
+http:
+  method: POST
+  url: "{{baseUrl}}/ownerships"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Bruno Ownership"
+      }
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        req.setBody({ name: `Bruno Ownership ${Date.now()}` });
+    - type: after-response
+      code: |-
+        if (res.getBody() && res.getBody().id) {
+          bru.setEnvVar("newOwnershipId", res.getBody().id);
+        }
+    - type: tests
+      code: |-
+        test("returns the created ownership", function () {
+          expect(res.getStatus()).to.equal(201);
+          expect(res.getBody().id).to.be.a("string");
+          expect(res.getBody().name).to.contain("Bruno Ownership");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

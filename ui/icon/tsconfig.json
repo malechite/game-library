@@ -1,0 +1,8 @@
+{
+  "extends": "@game-library/typescript-config/react-library.json",
+  "include": ["src/**/*"],
+  "exclude": ["**/*.stories.tsx", "**/*.stories.ts"],
+  "compilerOptions": {
+    "types": ["node", "react", "react-dom"]
+  }
+}

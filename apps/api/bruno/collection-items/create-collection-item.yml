@@ -1,0 +1,50 @@
+info:
+  name: Create Collection Item
+  type: http
+  seq: 1
+
+# Adds a copy of a catalog game to the signed-in user's collection (run games/create-game first).
+# Instead of `gameId` you may send a `game` object (same shape as games/create-game): the API then
+# finds or creates the catalog entry and the copy in one call.
+http:
+  method: POST
+  url: "{{baseUrl}}/collection-items"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "gameId": "{{gameId}}",
+        "ownershipId": "{{ownershipId}}",
+        "status": "owned",
+        "value": 42.5,
+        "pricePaid": 20,
+        "notes": "Added from Bruno",
+        "acquiredAt": "2026-01-15"
+      }
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.getBody() && res.getBody().id) {
+          bru.setEnvVar("collectionItemId", res.getBody().id);
+        }
+    - type: tests
+      code: |-
+        test("returns the created item owned by the caller", function () {
+          expect(res.getStatus()).to.equal(201);
+          expect(res.getBody().ownerId).to.equal(bru.getEnvVar("currentUserId"));
+          expect(res.getBody().gameId).to.equal(bru.getEnvVar("gameId"));
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

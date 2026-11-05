@@ -1,0 +1,36 @@
+{
+  "port": {
+    "__name": "PORT",
+    "__format": "number"
+  },
+  "host": "HOSTNAME",
+  "origins": {
+    "__name": "ORIGINS",
+    "__format": "json"
+  },
+  "authentication": {
+    "secret": "FEATHERS_SECRET"
+  },
+  "postgresql": {
+    "client": "pg",
+    "connection": "GAME_LIBRARY_DB_URL"
+  },
+  "s3": {
+    "endpoint": "S3_ENDPOINT",
+    "publicEndpoint": "S3_PUBLIC_ENDPOINT",
+    "region": "S3_REGION",
+    "bucket": "S3_BUCKET",
+    "accessKeyId": "S3_ACCESS_KEY_ID",
+    "secretAccessKey": "S3_SECRET_ACCESS_KEY"
+  },
+  "covers": {
+    "enabled": {
+      "__name": "COVERS_ENABLED",
+      "__format": "boolean"
+    }
+  },
+  "igdb": {
+    "clientId": "IGDB_CLIENT_ID",
+    "clientSecret": "IGDB_CLIENT_SECRET"
+  }
+}

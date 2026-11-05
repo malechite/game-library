@@ -1,0 +1,11 @@
+{
+  "port": 8998,
+  "postgresql": {
+    "client": "pg",
+    "connection": "postgres://game_library:development@localhost:5432/game_library_test"
+  },
+  "covers": {
+    "enabled": false,
+    "concurrency": 1
+  }
+}

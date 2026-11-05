@@ -1,0 +1,9 @@
+node_modules
+.git
+*.md
+.turbo
+**/dist
+apps/api/lib
+**/build
+**/node_modules
+coverage
