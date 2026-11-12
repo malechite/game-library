@@ -27,3 +27,6 @@ export { libraryMethods } from "./library";
 
 export type { CatalogSearchQuery, CatalogSearchService } from "./catalog-search";
 export { catalogSearchMethods } from "./catalog-search";
+
+export type { RoulettePickData, RoulettePickQuery, RoulettePickService } from "./roulette-pick";
+export { roulettePickMethods } from "./roulette-pick";

@@ -1,6 +1,7 @@
 const currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
 const wholeCurrency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 const shortDate = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" });
+const dateTime = new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" });
 
 /** "$1,234.50", or an em dash when there is no value. */
 export const formatCurrency = (value: number | null | undefined): string =>
@@ -14,6 +15,13 @@ export const formatDate = (value: string | null | undefined): string => {
   if (!value) return "—";
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? "—" : shortDate.format(date);
+};
+
+/** "Nov 12, 2026, 8:15 PM" in the user's time zone — for moments, not calendar dates; em dash when missing. */
+export const formatDateTime = (value: string | null | undefined): string => {
+  if (!value) return "—";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "—" : dateTime.format(date);
 };
 
 /** Today as an ISO date (YYYY-MM-DD) in the user's time zone. */

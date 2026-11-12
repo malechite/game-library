@@ -1,0 +1,27 @@
+info:
+  name: Remove Roulette Pick
+  type: http
+  seq: 4
+
+# Removes the history entry only; the copy and the catalog game stay.
+http:
+  method: DELETE
+  url: "{{baseUrl}}/roulette-picks/{{roulettePickId}}"
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("returns the removed pick", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().id).to.equal(bru.getEnvVar("roulettePickId"));
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

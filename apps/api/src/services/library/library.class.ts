@@ -1,7 +1,7 @@
 import { NotAuthenticated } from "@feathersjs/errors";
 import { KnexService } from "@feathersjs/knex";
 import type { KnexAdapterParams, KnexAdapterOptions } from "@feathersjs/knex";
-import type { ApiLibrarySummary } from "@game-library/types";
+import type { ApiLibrarySummary, ApiLibraryTitle } from "@game-library/types";
 
 import type { Application } from "../../declarations";
 import type { LibraryItem, LibraryQuery } from "./library.schema";
@@ -82,6 +82,22 @@ export class LibraryService<ServiceParams extends LibraryParams = LibraryParams>
       missingCovers: row?.missingCovers ?? 0,
       coverSyncActive: this.app.get("coverService").active
     };
+  }
+
+  /**
+   * Custom method: the id, title and platform of every item in the caller's
+   * library under the given filters, unpaginated. `find` stops at one page, and
+   * the roulette needs the whole pool up front to spin without further requests.
+   */
+  async titles(query: LibraryQuery, params?: ServiceParams): Promise<ApiLibraryTitle[]> {
+    const ownerId = (params as { user?: { id?: string } } | undefined)?.user?.id;
+    if (!ownerId) throw new NotAuthenticated("The library titles require a signed-in user");
+
+    // The whole filtered set in title order; always scoped to the caller.
+    const { $limit: _limit, $skip: _skip, $sort: _sort, $select: _select, ...filters } = query as Record<string, unknown>;
+    const builder = this.createQuery({ query: { ...filters, ownerId }, paginate: false } as unknown as ServiceParams);
+
+    return builder.clearSelect().select("id", "title", "platformName");
   }
 }
 

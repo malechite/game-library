@@ -7,6 +7,7 @@ import { game } from "./game/game";
 import { collectionItem } from "./collection-item/collection-item";
 import { library } from "./library/library";
 import { catalogSearch } from "./catalog-search/catalog-search";
+import { roulettePick } from "./roulette-pick/roulette-pick";
 
 import type { Application } from "../declarations";
 
@@ -21,4 +22,5 @@ export const services = (app: Application) => {
   app.configure(collectionItem);
   app.configure(library);
   app.configure(catalogSearch);
+  app.configure(roulettePick);
 };

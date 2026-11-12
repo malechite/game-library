@@ -1,0 +1,30 @@
+info:
+  name: List Roulette Picks
+  type: http
+  seq: 2
+
+# The caller's pick history, newest first by default.
+http:
+  method: GET
+  url: "{{baseUrl}}/roulette-picks?$limit=10"
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("returns only the caller's picks", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().data).to.be.an("array");
+          res.getBody().data.forEach(function (pick) {
+            expect(pick.ownerId).to.equal(bru.getEnvVar("currentUserId"));
+          });
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

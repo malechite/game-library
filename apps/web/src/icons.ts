@@ -1,4 +1,5 @@
 import {
+  ArrowsClockwise,
   Camera,
   CheckCircle,
   ClipboardText,
@@ -10,7 +11,9 @@ import {
   ListBullets,
   MagnifyingGlass,
   PencilSimple,
+  Play,
   Plus,
+  Shuffle,
   SignOut,
   SquaresFour,
   Trash,
@@ -26,6 +29,7 @@ import { registerIcons, type PhosphorIconName } from "@game-library/icon";
  * everywhere; anything else is a type error, so nothing unbundled can slip in.
  */
 export const appIcons = {
+  ArrowsClockwise,
   Camera,
   CheckCircle,
   ClipboardText,
@@ -37,7 +41,9 @@ export const appIcons = {
   ListBullets,
   MagnifyingGlass,
   PencilSimple,
+  Play,
   Plus,
+  Shuffle,
   SignOut,
   SquaresFour,
   Trash,

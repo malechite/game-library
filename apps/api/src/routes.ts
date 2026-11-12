@@ -58,6 +58,14 @@ const customRoutes = (app: Application): CustomRoute[] => [
     handle: (ctx, params) => app.service(ApiServicePath.Library).summary(ctx.query as never, params as never)
   },
   {
+    // The whole filtered library as { id, title, platformName }, unpaginated (the roulette pool).
+    method: "GET",
+    path: `/${ApiServicePath.Library}/titles`,
+    status: 200,
+    failure: "Could not load the library titles",
+    handle: (ctx, params) => app.service(ApiServicePath.Library).titles(ctx.query as never, params as never)
+  },
+  {
     // Re-run cover resolution for every game that still has no artwork.
     method: "POST",
     path: `/${ApiServicePath.Games}/covers/sync`,

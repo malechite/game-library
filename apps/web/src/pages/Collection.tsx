@@ -1,28 +1,17 @@
-import { useMemo } from "react";
-import {
-  Button,
-  FilterBar,
-  Icon,
-  Pagination,
-  ToggleGroup,
-  ToggleGroupItem,
-  usePagination,
-  type FilterBarFilter
-} from "@game-library/cinder";
-import { useGenres, useLibrary, useLibrarySummary, useOwnerships, usePlatforms, useToggleFavorite } from "@game-library/sdk";
-import type { ApiLibraryItem, ApiLookup } from "@game-library/types";
+import { Button, FilterBar, Icon, Pagination, ToggleGroup, ToggleGroupItem, usePagination } from "@game-library/cinder";
+import { useLibrary, useLibrarySummary, useToggleFavorite } from "@game-library/sdk";
+import type { ApiLibraryItem } from "@game-library/types";
 import { EmptyState } from "../components/EmptyState";
 import { PageHeader } from "../components/PageHeader";
 import { GameGrid, GameGridSkeleton } from "../components/library/GameGrid";
 import { GameTable } from "../components/library/GameTable";
 import { useDebounce } from "../hooks/useDebounce";
+import { useLibraryFilterOptions } from "../hooks/useLibraryFilterOptions";
 import { useLibraryModals } from "../hooks/useLibraryModals";
-import { LibraryFilterKey, useLibraryParams } from "../hooks/useLibraryParams";
+import { useLibraryParams } from "../hooks/useLibraryParams";
 import { formatTotal } from "../lib/format";
-import { LibrarySort, LibraryView, SORT_OPTIONS, STATUS_OPTIONS } from "../lib/libraryOptions";
+import { LibrarySort, LibraryView, SORT_OPTIONS } from "../lib/libraryOptions";
 import { page, content, footer, range, footerPagination, viewToggleIcon, totalValue } from "./Collection.css";
-
-const toOptions = (rows: ApiLookup[]) => rows.map((row) => ({ value: row.id, label: row.name }));
 
 /** The home page: the signed-in user's whole collection, as tiles or a list. */
 export const Collection = () => {
@@ -31,9 +20,7 @@ export const Collection = () => {
   // The box updates on every keystroke; the query waits for a pause.
   const searchTerm = useDebounce(params.search, 250);
 
-  const { data: platforms = [] } = usePlatforms();
-  const { data: genres = [] } = useGenres();
-  const { data: ownerships = [] } = useOwnerships();
+  const filters = useLibraryFilterOptions();
   const toggleFavorite = useToggleFavorite();
   const handleToggleFavorite = (item: ApiLibraryItem) => toggleFavorite.mutate({ id: item.id, isFavorite: !item.isFavorite });
 
@@ -52,16 +39,6 @@ export const Collection = () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   });
-
-  const filters = useMemo<FilterBarFilter[]>(
-    () => [
-      { key: LibraryFilterKey.Platform, label: "Platforms", options: toOptions(platforms) },
-      { key: LibraryFilterKey.Genre, label: "Genres", options: toOptions(genres) },
-      { key: LibraryFilterKey.Ownership, label: "Ownership", allLabel: "Any ownership", options: toOptions(ownerships) },
-      { key: LibraryFilterKey.Status, label: "Statuses", allLabel: "Owned + wishlist", options: STATUS_OPTIONS }
-    ],
-    [platforms, genres, ownerships]
-  );
 
   const subtitle = summary ? (
     <>

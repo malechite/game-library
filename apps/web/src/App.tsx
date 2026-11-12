@@ -7,6 +7,7 @@ import { AppFrame } from "./components/AppFrame";
 import { RequireAuth } from "./components/RequireAuth";
 import { Login } from "./pages/Login";
 import { Collection } from "./pages/Collection";
+import { Roulette } from "./pages/Roulette";
 import { Profile } from "./pages/Profile";
 import { Audit } from "./pages/Audit";
 
@@ -18,6 +19,7 @@ export const App = () => (
           <Route path={AppRoute.Login} element={<Login />} />
           <Route element={<RequireAuth />}>
             <Route path={AppRoute.Home} element={<Collection />} />
+            <Route path={AppRoute.Roulette} element={<Roulette />} />
             <Route path={AppRoute.Profile} element={<Profile />} />
             <Route path={AppRoute.Audit} element={<Audit />} />
           </Route>

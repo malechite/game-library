@@ -26,7 +26,10 @@ export enum ApiServicePath {
   Games = "games",
   CollectionItems = "collection-items",
   Library = "library",
-  CatalogSearch = "catalog-search"
+  CatalogSearch = "catalog-search",
+
+  // Roulette
+  RoulettePicks = "roulette-picks"
 }
 
 /** The service paths that are simple `{ id, name }` lookup tables. */
@@ -202,6 +205,32 @@ export interface ApiLibrarySummary {
   missingCovers: number;
   /** True while the server is fetching covers in the background. */
   coverSyncActive: boolean;
+}
+
+/**
+ * The least a client needs to name a library item: one row of `GET /library/titles`,
+ * which returns the whole (filtered) library unpaginated for the roulette reel.
+ */
+export interface ApiLibraryTitle {
+  /** Collection item id. */
+  id: string;
+  title: string;
+  platformName: string;
+}
+
+/** A game the roulette landed on and the user chose to play, joined with its catalog entry. */
+export interface ApiRoulettePick {
+  id: string;
+  ownerId: string;
+  gameId: string;
+  /** The copy that was picked; null once that copy has left the collection. */
+  collectionItemId?: string | null;
+  title: string;
+  platformName: string;
+  coverUrl?: string | null;
+  /** When the game was picked. */
+  createdAt: string;
+  updatedAt: string;
 }
 
 /** Outcome of a CSV collection import. */

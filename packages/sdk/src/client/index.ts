@@ -13,6 +13,7 @@ import {
   collectionItemMethods,
   libraryMethods,
   catalogSearchMethods,
+  roulettePickMethods,
   type UserService,
   type AssetService,
   type AuditService,
@@ -20,7 +21,8 @@ import {
   type GameService,
   type CollectionItemService,
   type LibraryService,
-  type CatalogSearchService
+  type CatalogSearchService,
+  type RoulettePickService
 } from "./services";
 
 /** Every service the API exposes, keyed by its path. Mirrors the server's `ServiceTypes`. */
@@ -39,6 +41,7 @@ export interface ServiceTypes {
   [ApiServicePath.CollectionItems]: CollectionItemService;
   [ApiServicePath.Library]: LibraryService;
   [ApiServicePath.CatalogSearch]: CatalogSearchService;
+  [ApiServicePath.RoulettePicks]: RoulettePickService;
 }
 
 export interface Configuration {
@@ -93,6 +96,9 @@ export const createClient = (
   client.use(ApiServicePath.Library, connection.service(ApiServicePath.Library), { methods: [...libraryMethods] });
   client.use(ApiServicePath.CatalogSearch, connection.service(ApiServicePath.CatalogSearch), {
     methods: [...catalogSearchMethods]
+  });
+  client.use(ApiServicePath.RoulettePicks, connection.service(ApiServicePath.RoulettePicks), {
+    methods: [...roulettePickMethods]
   });
 
   return client;

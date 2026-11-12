@@ -1,0 +1,34 @@
+info:
+  name: Library Titles
+  type: http
+  seq: 4
+
+# Custom route: the id, title and platform of every item in the caller's library, unpaginated.
+# Accepts the same filters as list-library (paging and sort are ignored). The roulette loads its
+# pool from this. Maps to LibraryService.titles — see apps/api/src/routes.ts.
+http:
+  method: GET
+  url: "{{baseUrl}}/library/titles?status=owned"
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("returns every matching title", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody()).to.be.an("array");
+          res.getBody().forEach(function (item) {
+            expect(item.id).to.be.a("string");
+            expect(item.title).to.be.a("string");
+            expect(item.platformName).to.be.a("string");
+          });
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

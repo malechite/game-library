@@ -35,9 +35,10 @@ export const library = (app: Application) => {
         schemaHooks.resolveQuery(libraryQueryResolver),
         limitToOwner()
       ],
-      // `summary` receives the filters as its data argument (see the route in app.ts);
-      // the same query validator coerces and checks them, and the method scopes to the caller.
-      summary: [authenticate("jwt"), schemaHooks.validateData(libraryQueryValidator)]
+      // `summary` and `titles` receive the filters as their data argument (see src/routes.ts);
+      // the same query validator coerces and checks them, and each method scopes to the caller.
+      summary: [authenticate("jwt"), schemaHooks.validateData(libraryQueryValidator)],
+      titles: [authenticate("jwt"), schemaHooks.validateData(libraryQueryValidator)]
     },
     after: { all: [] },
     error: { all: [] }

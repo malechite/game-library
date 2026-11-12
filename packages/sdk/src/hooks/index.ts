@@ -7,3 +7,4 @@ export * from "./library";
 export * from "./collection";
 export * from "./games";
 export * from "./catalog";
+export * from "./roulette";

@@ -61,7 +61,10 @@ export const AppHeader = () => {
   const logout = useLogout();
   const navigate = useNavigate();
 
-  const navItems: NavItem[] = [{ to: AppRoute.Home, label: "Collection" }];
+  const navItems: NavItem[] = [
+    { to: AppRoute.Home, label: "Collection" },
+    { to: AppRoute.Roulette, label: "Roulette" }
+  ];
 
   const handleSignOut = async () => {
     await logout.mutateAsync();

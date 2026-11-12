@@ -1,0 +1,45 @@
+info:
+  name: Create Roulette Pick
+  type: http
+  seq: 1
+
+# Logs that the signed-in user chose to play one of their copies (run collection-items/create-collection-item
+# first). Only `collectionItemId` is sent: the owner comes from the token and the game from the copy.
+http:
+  method: POST
+  url: "{{baseUrl}}/roulette-picks"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "collectionItemId": "{{collectionItemId}}"
+      }
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.getBody() && res.getBody().id) {
+          bru.setEnvVar("roulettePickId", res.getBody().id);
+        }
+    - type: tests
+      code: |-
+        test("returns the pick joined with its game", function () {
+          expect(res.getStatus()).to.equal(201);
+          expect(res.getBody().ownerId).to.equal(bru.getEnvVar("currentUserId"));
+          expect(res.getBody().collectionItemId).to.equal(bru.getEnvVar("collectionItemId"));
+          expect(res.getBody().title).to.be.a("string");
+          expect(res.getBody().platformName).to.be.a("string");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
